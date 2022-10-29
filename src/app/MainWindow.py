@@ -27,12 +27,12 @@ class MainWindow(QMainWindow):
         return SimpleNamespace(index = n, view = tabView)
 
 
-    @QtCore.pyqtSlot(str, str, dict, QWidget)
-    def updateView(node, group, sensors, view):
-        if node not in view.tabs:
-            view.addTab(node)
-        tabView = view.tabs[node].view 
-        if group not in tabView:
+    @QtCore.pyqtSlot(str, str, dict)
+    def updateView(self, node, group, sensors):
+        if node not in self.tabs:
+            self.addTab(node)
+        tabView = self.tabs[node].view 
+        if group not in tabView.groups:
             tabView.addPane(group)
         groupView = tabView.groups[group].view
         groupView.update(sensors)
