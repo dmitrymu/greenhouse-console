@@ -1,46 +1,39 @@
 from PyQt6 import QtCore
 from PyQt6.QtCore import Qt
+from PyQt6 import QtGui
+from PyQt6.QtWidgets import QWidget
 from types import SimpleNamespace as SN
 
 class SensorGroup(QtCore.QObject):
-    def __init__(self, *args, name = "???", **kwargs):
+    def __init__(self, *args, parent = None, name = "???", **kwargs):
         super(SensorGroup, self).__init__(*args, **kwargs)
+        self.parent = parent
         self.name = name
         self.sensors = {}
-        self.view = None
-
-    def setView(self, view):
-        self.view = view
 
     def updateSensor(self, name, value):
         self.sensors[name] = value
-        if (self.view is not None):
-            table = self.view.view
-            table.clearContents()
-            table.setRowCount(len(self.sensors))
-            table.setVerticalHeaderLabels(list(self.sensors.keys()))
+        self.parent.parent.updateSignal.emit(
+            self.parent.name, self.name, self.sensors, self.parent.parent.view)
 
 class SingleNode(QtCore.QObject):
-    def __init__(self, *args, name = "???", **kwargs):
+    def __init__(self, *args, parent = None, name = "???", **kwargs):
         super(SingleNode, self).__init__(*args, **kwargs)
+        self.parent = parent
         self.name = name
         self.groups = {}
-        self.view = None
-
-    def setView(self, view):
-        self.view = view
 
     def updateGroup(self, name):
         if name in self.groups:
             return self.groups[name]
         else:
-            group = SensorGroup(name = name)
+            group = SensorGroup(parent = self, name = name)
             self.groups[name] = group
-            if (self.view is not None):
-                group.setView(self.view.view.addPane(name))
             return group
 
 class NodeModel(QtCore.QObject):
+    updateSignal = QtCore.pyqtSignal(str, str, dict, QWidget)
+
     def __init__(self, *args, nodes=None, **kwargs):
         super(NodeModel, self).__init__(*args, **kwargs)
         self.nodes = nodes or {}
@@ -48,14 +41,13 @@ class NodeModel(QtCore.QObject):
 
     def setView(self, view):
         self.view = view
+        self.updateSignal.connect(self.view.updateView)
 
     def updateNode(self, name):
         if name in self.nodes:
             return self.nodes[name]
         else:
-            node = SingleNode(name = name)
-            if (self.view is not None):
-                node.setView(self.view.addTab(name))
+            node = SingleNode(parent = self, name = name)
             self.nodes[name] = node
             return node
 
