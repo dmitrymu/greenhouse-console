@@ -11,6 +11,8 @@ import sys
 # If you know you won't use command line arguments QApplication([]) works too.
 app = QApplication(sys.argv)
 
+app.setStyleSheet("QWidget {font-size: 14pt}")
+
 model = NodeModel()
 client = CreateMqttClient("localhost")
 client.user_data_set(model)
@@ -18,7 +20,9 @@ client.user_data_set(model)
 # Create a Qt widget, which will be our window.
 window = MainWindow()
 model.setView(window)
-window.showMaximized()  # IMPORTANT!!!!! Windows are hidden by default.
+window.setFixedSize(1024, 600)  # !!!  for testing only
+window.show()  # IMPORTANT!!!!! Windows are hidden by default.
+# window.showMaximized()
 
 client.loop_start()
 
