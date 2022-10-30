@@ -19,7 +19,7 @@ def decodeJsonPayload(payload):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, model, msg):
     tokens = msg.topic.split('/')
-    print(tokens)
+    # print(tokens)
     payload = decodeJsonPayload(msg.payload)
     nodeName = tokens[1]
     node = model.updateNode(nodeName)
