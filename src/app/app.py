@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QApplication, QWidget
+from PyQt5.QtWidgets import QApplication, QWidget
 from MainWindow import MainWindow
 from NodeModel import NodeModel
 from MqttClient import CreateMqttClient
@@ -17,9 +17,9 @@ parser.add_argument("-p", "--port", type = int,
 parser.add_argument("--font-size", type = int,
                     default=12, help="Application font size, pt")
 args = parser.parse_args()
-if (args.help):
-    parser.print_help()
-    sys.exit(1)
+# if (args.help):
+#     parser.print_help()
+#     sys.exit(1)
 
 # You need one (and only one) QApplication instance per application.
 # Pass in sys.argv to allow command line arguments for your app.

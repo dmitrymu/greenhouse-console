@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QWidget, QMainWindow, QTabWidget
-from PyQt6 import QtCore
-from PyQt6 import QtGui
+from PyQt5.QtWidgets import QWidget, QMainWindow, QTabWidget
+from PyQt5 import QtCore
+from PyQt5 import QtGui
 from types import SimpleNamespace
 from NodeView import NodeView
 
