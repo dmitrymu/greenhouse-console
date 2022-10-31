@@ -46,4 +46,11 @@ Run `sudo systemctl start nodm` and verify that the app is starting up.
  ````
  mosquitto_pub -h <MQTT broker host> -t "nodes/node1/temp/T2" -m "{\"value\": 18, \"unit\": \"\u00b0C\"}"
  ```` 
-.
+- To publish messages periodically, use something like the following (2 seconds betwen messages, random value [10, 20]):
+```
+while true; do mosquitto_pub -h <MQTT broker host> -t "nodes/node1/temp/T2" -m "{\"value\": $((10 + $RANDOM % 10)), \"unit\": \"\u00b0C\"}"; sleep 2; done
+```
+- To verify published messages:
+```
+mosquitto_sub -h <MQTT broker host> -F '\e[92m%t \e[96m%p\e[0m' -q 2 -t '#'
+```
