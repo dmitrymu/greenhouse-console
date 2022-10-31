@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QWidget
 from MainWindow import MainWindow
-from NodeModel import NodeModel
+from NodeModel import SystemModel
 from MqttClient import MqttClient
 from argparse import ArgumentParser
 
@@ -28,15 +28,16 @@ app = QApplication(sys.argv)
 
 app.setStyleSheet(f"QWidget {{font-size: {args.font_size}pt}}")
 
-model = NodeModel()
+model = SystemModel()
 client = MqttClient(host = args.host, port = args.port, model = model)
 
 # Create a Qt widget, which will be our window.
 window = MainWindow()
-model.setView(window)
 window.setFixedSize(1024, 600)  # !!!  for testing only
 window.show()  # IMPORTANT!!!!! Windows are hidden by default.
 # window.showMaximized()
+
+model.setView(window.getSystemView())
 
 client.run()
 

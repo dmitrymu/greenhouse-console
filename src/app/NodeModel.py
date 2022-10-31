@@ -16,9 +16,9 @@ class SensorGroup(QtCore.QObject):
         self.parent.parent.updateSignal.emit(
             self.parent.name, self.name, self.sensors)
 
-class SingleNode(QtCore.QObject):
+class NodeModel(QtCore.QObject):
     def __init__(self, *args, parent = None, name = "???", **kwargs):
-        super(SingleNode, self).__init__(*args, **kwargs)
+        super(NodeModel, self).__init__(*args, **kwargs)
         self.parent = parent
         self.name = name
         self.groups = {}
@@ -31,11 +31,11 @@ class SingleNode(QtCore.QObject):
             self.groups[name] = group
             return group
 
-class NodeModel(QtCore.QObject):
+class SystemModel(QtCore.QObject):
     updateSignal = QtCore.pyqtSignal(str, str, dict)
 
     def __init__(self, *args, nodes=None, **kwargs):
-        super(NodeModel, self).__init__(*args, **kwargs)
+        super(SystemModel, self).__init__(*args, **kwargs)
         self.nodes = nodes or {}
         self.view = None
 
@@ -47,7 +47,7 @@ class NodeModel(QtCore.QObject):
         if name in self.nodes:
             return self.nodes[name]
         else:
-            node = SingleNode(parent = self, name = name)
+            node = NodeModel(parent = self, name = name)
             self.nodes[name] = node
             return node
 

@@ -1,8 +1,5 @@
-from PyQt5.QtWidgets import QWidget, QMainWindow, QTabWidget
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from types import SimpleNamespace
-from NodeView import NodeView
+from PyQt5.QtWidgets import QMainWindow
+from NodeView import SystemView
 
 class MainWindow(QMainWindow):
 
@@ -11,28 +8,8 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("My App")
 
-        # layout = QVBoxLayout()
-
-        # layout.addWidget(Color('red'))
-
-        self.widget = QTabWidget()
-        # widget.setLayout(layout)
+        self.widget = SystemView()
         self.setCentralWidget(self.widget)
-        self.tabs = {}
-    
-    def addTab(self, name):
-        tabView = NodeView()
-        n = self.widget.addTab(tabView, name)
-        self.tabs[name] = SimpleNamespace(index = n, view = tabView)
-        return SimpleNamespace(index = n, view = tabView)
 
-
-    @QtCore.pyqtSlot(str, str, dict)
-    def updateView(self, node, group, sensors):
-        if node not in self.tabs:
-            self.addTab(node)
-        tabView = self.tabs[node].view 
-        if group not in tabView.groups:
-            tabView.addPane(group)
-        groupView = tabView.groups[group].view
-        groupView.update(sensors)
+    def getSystemView(self):
+        return self.widget

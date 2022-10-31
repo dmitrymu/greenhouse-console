@@ -1,4 +1,6 @@
-from PyQt5.QtWidgets import QWidget, QGroupBox, QVBoxLayout, QGridLayout, QLabel
+from PyQt5.QtWidgets import QWidget, QGroupBox, QVBoxLayout, QGridLayout, QLabel, QTabWidget
+from PyQt5 import QtCore
+from PyQt5 import QtGui
 from types import SimpleNamespace as SN
 
 class GroupView(QWidget):
@@ -38,5 +40,27 @@ class NodeView(QWidget):
         pane.layout().addWidget(vlist)
         self.layout().insertWidget(self.layout().count() - 1, pane)
         self.groups[name] = SN(root = pane, view = vlist)
-        #return SimpleNamespace(root = pane, view = vlist)
+
+class SystemView(QTabWidget):
+
+    def __init__(self):
+        super(SystemView, self).__init__()
+        self.tabs = {}
+    
+    def addNodeTab(self, name):
+        tabView = NodeView()
+        n = self.addTab(tabView, name)
+        self.tabs[name] = SN(index = n, view = tabView)
+        return self.tabs[name]
+
+
+    @QtCore.pyqtSlot(str, str, dict)
+    def updateView(self, node, group, sensors):
+        if node not in self.tabs:
+            self.addNodeTab(node)
+        tabView = self.tabs[node].view 
+        if group not in tabView.groups:
+            tabView.addPane(group)
+        groupView = tabView.groups[group].view
+        groupView.update(sensors)
         
