@@ -1,7 +1,7 @@
-from PyQt6 import QtCore
-from PyQt6.QtCore import Qt
-from PyQt6 import QtGui
-from PyQt6.QtWidgets import QWidget
+from PyQt5 import QtCore
+from PyQt5.QtCore import Qt
+from PyQt5 import QtGui
+from PyQt5.QtWidgets import QWidget
 from types import SimpleNamespace as SN
 
 class SensorGroup(QtCore.QObject):

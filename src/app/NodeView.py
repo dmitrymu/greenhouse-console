@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QGroupBox, QVBoxLayout, QGridLayout, QLabel
+from PyQt5.QtWidgets import QWidget, QGroupBox, QVBoxLayout, QGridLayout, QLabel
 from types import SimpleNamespace as SN
 
 class GroupView(QWidget):
