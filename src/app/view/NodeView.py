@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QGroupBox, QVBoxLayout, QGridLayout, QLabel, QTabWidget, QSizePolicy
-from GroupView import GroupView
+from .GroupView import GroupView
 from types import SimpleNamespace as SN
 
 

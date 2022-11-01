@@ -1,6 +1,6 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QTabWidget
-from NodeView import NodeView
+from .NodeView import NodeView
 from types import SimpleNamespace as SN
 
 class SystemView(QWidget):
