@@ -3,6 +3,7 @@ from MainWindow import MainWindow
 from NodeModel import SystemModel
 from MqttClient import MqttClient
 from argparse import ArgumentParser
+import qdarkstyle
 
 # Only needed for access to command line arguments
 import sys
@@ -26,12 +27,13 @@ args = parser.parse_args()
 # If you know you won't use command line arguments QApplication([]) works too.
 app = QApplication(sys.argv)
 
-app.setStyleSheet(f"QWidget {{font-size: {args.font_size}pt}}")
+stylesheet = qdarkstyle.load_stylesheet_pyqt5();
+stylesheet += f"QWidget {{font-size: {args.font_size}pt}}"
+app.setStyleSheet(stylesheet)
 
 model = SystemModel()
 client = MqttClient(host = args.host, port = args.port, model = model)
 
-# Create a Qt widget, which will be our window.
 window = MainWindow()
 window.setFixedSize(1024, 600)  # !!!  for testing only
 window.show()  # IMPORTANT!!!!! Windows are hidden by default.

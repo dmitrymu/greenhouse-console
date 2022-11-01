@@ -13,6 +13,7 @@ class MqttClient(mqtt.Client):
         self.client.user_data_set(model)
         self.client.on_connect = self.onConnect
         self.client.on_message = self.onMessage
+        self.client.on_disconnect = self.onDisconnect
         self.client.connect(host, port, timeout)
 
     # Run MQTT event loop in a separate thread
@@ -28,10 +29,14 @@ class MqttClient(mqtt.Client):
     @callbackMethod
     def onConnect(self, client, model, flags, rc):
         print("Connected with result code "+str(rc))
+        model.setConnectStatus(True, f"Connected: {mqtt.error_string(rc)}")
 
         # Subscribing in on_connect() means that if we lose the connection and
         # reconnect then subscriptions will be renewed.
         client.subscribe("nodes/#")
+
+    def onDisconnect(self, client, model, rc):
+        model.setConnectStatus(False, f"Disconnected: {mqtt.error_string(rc)}")
 
 
     @callbackMethod

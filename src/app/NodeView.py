@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QGroupBox, QVBoxLayout, QGridLayout, QLabel, QTabWidget
+from PyQt5.QtWidgets import QWidget, QGroupBox, QVBoxLayout, QGridLayout, QLabel, QTabWidget, QSizePolicy
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from types import SimpleNamespace as SN
@@ -41,17 +41,31 @@ class NodeView(QWidget):
         self.layout().insertWidget(self.layout().count() - 1, pane)
         self.groups[name] = SN(root = pane, view = vlist)
 
-class SystemView(QTabWidget):
+class SystemView(QWidget):
 
     def __init__(self):
         super(SystemView, self).__init__()
+        self.nodes = QTabWidget()
+        self.status = QLabel("???")
+        self.status.setStyleSheet("QLabel { font-weight: bold; }")
+        layout = QVBoxLayout()
+        layout.addWidget(self.nodes, stretch=1)
+        layout.addStretch()
+        layout.addWidget(self.status, stretch=0)
+        self.setLayout(layout)
         self.tabs = {}
     
     def addNodeTab(self, name):
         tabView = NodeView()
-        n = self.addTab(tabView, name)
+        n = self.nodes.addTab(tabView, name)
         self.tabs[name] = SN(index = n, view = tabView)
         return self.tabs[name]
+
+    @QtCore.pyqtSlot(bool, str)
+    def updateConnectionStatus(self, isConnect, msg):
+        self.status.setText(msg)
+        self.status.setStyleSheet(
+            "QLabel { color: green; }" if isConnect else "QLabel { color: red; }")
 
 
     @QtCore.pyqtSlot(str, str, dict)
