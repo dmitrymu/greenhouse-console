@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow
-from NodeView import SystemView
+from view.SysemView import SystemView
 
 class MainWindow(QMainWindow):
 
