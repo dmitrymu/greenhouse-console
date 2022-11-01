@@ -5,6 +5,8 @@
 At Raspberry Pi install Qt5, PyQt5, paho-mqtt _using `apt install`_. Note that `pip` installation
  is currently broken. 
 
+`pip install qdarkstyle`
+
 For other systems: from repository root run `source init.sh`
 
 Run `source installer.sh` to make distribution.

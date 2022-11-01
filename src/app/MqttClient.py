@@ -28,7 +28,6 @@ class MqttClient(mqtt.Client):
 
     @callbackMethod
     def onConnect(self, client, model, flags, rc):
-        print("Connected with result code "+str(rc))
         model.setConnectStatus(True, f"Connected: {mqtt.error_string(rc)}")
 
         # Subscribing in on_connect() means that if we lose the connection and
