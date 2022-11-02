@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication
 from MainWindow import MainWindow
-from NodeModel import SystemModel
+from model.SystemModel import SystemModel
 from MqttClient import MqttClient
 from argparse import ArgumentParser
 import qdarkstyle

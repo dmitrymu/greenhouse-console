@@ -1,20 +1,17 @@
 import json
-from typing import TypeVar
 from types import SimpleNamespace as SN
 import paho.mqtt.client as mqtt
-from NodeModel import SystemModel
 
 # Encapsulate paho.mqtt client
-TClient = TypeVar("TClient", bound="MqttClient")
 class MqttClient(mqtt.Client):
 
     # Construct new client
     def __init__(self,
                  *args,
-                 host: str = "127.0.0.1",
-                 port: int = 1883,
-                 timeout: int = 60,
-                 model: SystemModel = None,
+                 host = "127.0.0.1",
+                 port = 1883,
+                 timeout = 60,
+                 model = None,
                  **kwargs):
         super(MqttClient, self).__init__(*args, **kwargs)
         self.client = mqtt.Client()
@@ -36,9 +33,9 @@ class MqttClient(mqtt.Client):
 
     # to be executed on connect
     @callbackMethod
-    def onConnect(self: TClient,
-                  client: mqtt.Client,
-                  model: SystemModel,
+    def onConnect(self,
+                  client,
+                  model,
                   flags,
                   rc):
         model.setConnectStatus(True, mqtt.error_string(rc))
@@ -49,17 +46,17 @@ class MqttClient(mqtt.Client):
 
     # to be executed on disconnect
     @callbackMethod
-    def onDisconnect(self: TClient,
-                     client: mqtt.Client,
-                     model: SystemModel,
+    def onDisconnect(self,
+                     client,
+                     model,
                      rc):
         model.setConnectStatus(False, mqtt.error_string(rc))
 
     # to be executed on receiving message
     @callbackMethod
-    def onMessage(self: TClient,
-                  client: mqtt.Client,
-                  model: SystemModel,
+    def onMessage(self,
+                  client,
+                  model,
                   msg):
         def decodeJsonPayload(payload):
             try:
