@@ -1,5 +1,7 @@
-from PyQt5 import QtCore
 from types import SimpleNamespace as SN
+from typing import Dict
+from PyQt5 import QtCore
+from view.SysemView import SystemView
 
 class SensorGroup(QtCore.QObject):
     def __init__(self, *args, parent = None, name = "???", **kwargs):
@@ -31,21 +33,25 @@ class NodeModel(QtCore.QObject):
 class SystemModel(QtCore.QObject):
     updateSignal = QtCore.pyqtSignal(str, str, dict)
     connectSignal = QtCore.pyqtSignal(bool, str)
+    nodes: Dict[str, NodeModel]
+    view: SystemView
 
-    def __init__(self, *args, nodes=None, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(SystemModel, self).__init__(*args, **kwargs)
-        self.nodes = nodes or {}
+        self.nodes = {}
         self.view = None
 
-    def setConnectStatus(self, isConnected, msg):
+    def setConnectStatus(self,
+                         isConnected: bool,
+                         msg: str) -> None:
         self.connectSignal.emit(isConnected, msg)
 
-    def setView(self, view):
+    def setView(self, view: SystemView):
         self.view = view
         self.updateSignal.connect(self.view.updateView)
         self.connectSignal.connect(self.view.updateConnectionStatus)
 
-    def updateNode(self, name):
+    def updateNode(self, name: str) -> NodeModel:
         if name in self.nodes:
             return self.nodes[name]
         else:
