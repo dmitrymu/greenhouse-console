@@ -33,9 +33,10 @@ class ChartView(pg.PlotWidget):
     # separate threads. Any parameters passed by update signal-slot
     # connection are copied. We don't want to copy large buffers.
     #
-    # Note: time must be timestamp, not datetime (QtGraph requirement)
-    #
-    # TODO: updates should come in batches.  Remove extra data points. 
+    # Note: 
+    #   - Time must be timestamp, not datetime (QtGraph requirement)
+    #   - SensorGroup in ..view.NodeModel accumulates data point values
+    # 
     def addPoint(self, time, values):
         # Earliest time in the chart time window.
         minTime = (dt.datetime.fromtimestamp(time)
