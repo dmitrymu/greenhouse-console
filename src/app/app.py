@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtWidgets import QApplication
 from MainWindow import MainWindow
-from NodeModel import SystemModel
+from model.SystemModel import SystemModel
 from MqttClient import MqttClient
 from argparse import ArgumentParser
 import qdarkstyle
@@ -9,7 +9,8 @@ import qdarkstyle
 import sys
 
 parser = ArgumentParser(prog="Greenhouse console",
-                        description="Display greeenhouse sensors received from MQTT broker")
+                        description="Display greenhouse sensors"\
+                                    " received from MQTT broker")
 
 parser.add_argument("-H", "--host",
                     default="localhost", help="MQTT broker host")
@@ -18,15 +19,10 @@ parser.add_argument("-p", "--port", type = int,
 parser.add_argument("--font-size", type = int,
                     default=12, help="Application font size, pt")
 args = parser.parse_args()
-# if (args.help):
-#     parser.print_help()
-#     sys.exit(1)
 
-# You need one (and only one) QApplication instance per application.
-# Pass in sys.argv to allow command line arguments for your app.
-# If you know you won't use command line arguments QApplication([]) works too.
 app = QApplication(sys.argv)
 
+# Set dark theme and default font size
 stylesheet = qdarkstyle.load_stylesheet_pyqt5();
 stylesheet += f"QWidget {{font-size: {args.font_size}pt}}"
 app.setStyleSheet(stylesheet)
@@ -35,13 +31,14 @@ model = SystemModel()
 client = MqttClient(host = args.host, port = args.port, model = model)
 
 window = MainWindow()
-window.setFixedSize(1024, 600)  # !!!  for testing only
-window.show()  # IMPORTANT!!!!! Windows are hidden by default.
-# window.showMaximized()
+window.setFixedSize(1024, 600)  # Imitate kiosk screen size
+window.show()  
+
 
 model.setView(window.getSystemView())
 
+# Start MQTT event loop.
 client.run()
 
-# Start the event loop.
+# Start QT event loop.
 app.exec()

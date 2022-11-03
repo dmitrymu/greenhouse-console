@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QTabWidget
+from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QTabWidget
 from .NodeView import NodeView
+from.StatusView import StatusView
 from types import SimpleNamespace as SN
 
 class SystemView(QWidget):
@@ -8,8 +9,7 @@ class SystemView(QWidget):
     def __init__(self):
         super(SystemView, self).__init__()
         self.nodes = QTabWidget()
-        self.status = QLabel("???")
-        self.status.setStyleSheet(self.status.styleSheet() +"QLabel { font-weight: bold; }")
+        self.status = StatusView()
         layout = QVBoxLayout()
         layout.addWidget(self.nodes, stretch=1)
         layout.addStretch()
@@ -24,11 +24,12 @@ class SystemView(QWidget):
         return self.tabs[name]
 
     @QtCore.pyqtSlot(bool, str)
-    def updateConnectionStatus(self, isConnect, msg):
-        self.status.setText(msg)
-        self.status.setStyleSheet(
-            self.status.styleSheet() +
-            ("QLabel { color: green; }" if isConnect else "QLabel { color: red; }"))
+    def updateConnectionStatus(self, connected, msg):
+        self.status.setStatus(connected, msg)
+        # self.status.setText(msg)
+        # self.status.setStyleSheet(
+        #     self.status.styleSheet() +
+        #     ("QLabel { color: green; }" if isConnect else "QLabel { color: red; }"))
 
 
     @QtCore.pyqtSlot(str, str, dict)
